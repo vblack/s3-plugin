@@ -7,6 +7,7 @@ import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.S3ClientOptions;
 import hudson.ProxyConfiguration;
 
 import java.util.regex.Pattern;
@@ -33,6 +34,8 @@ public class ClientHelper {
         }
 
         client.setRegion(awsRegion);
+
+        client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
 
         return client;
     }

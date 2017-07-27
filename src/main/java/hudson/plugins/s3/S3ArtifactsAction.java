@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
 import jenkins.model.RunAction2;
@@ -78,6 +79,7 @@ public class S3ArtifactsAction implements RunAction2 {
             if (record.getArtifact().getName().equals(artifact)) {
                 final S3Profile s3 = S3BucketPublisher.getProfile(profile);
                 final AmazonS3Client client = s3.getClient(record.getArtifact().getRegion());
+                client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
                 final String url = getDownloadURL(client, s3.getSignedUrlExpirySeconds(), build, record);
                 response.sendRedirect2(url);
                 return;
